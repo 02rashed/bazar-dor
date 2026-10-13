@@ -1,16 +1,18 @@
+
 import Image from "next/image";
-import Navbar from "./Navbar";  
+import Navbar from "./Navbar"; 
+import Link from "next/link"; 
 const Header = () => {
-  const date = new Date().toLocaleDateString("bn-BD", {
+       const date =new Date().toLocaleDateString("bn-BD", {
     dateStyle: "full",
   });
-
   return (
-    <div>
+    <div className="fixed top-0 z-50 w-full bg-white shadow-sm">
       <div className="border-b border-gray-100 bg-white py-3 px-6 shadow-sm">
         <div className="mx-auto max-w-6xl flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="flex items-center justify-center rounded-xl bg-[#008a45] p-2.5 shadow-sm">
+              <Link href="/">
               <Image
                 src="/logo-icon.png"
                 width={25}
@@ -18,12 +20,13 @@ const Header = () => {
                 alt="logo"
                 className="object-contain text-white"
               />
+              </Link>
             </div>
             <div>
               <h1 className="text-2xl font-bold text-gray-900 tracking-tight">
                 বাজার দর
               </h1>
-              <p className="text-xs font-medium text-gray-500">{date}</p>
+               <p className="text-xs font-medium text-gray-500">{date}</p>
             </div>
           </div>
           <div className="flex items-center gap-4">
