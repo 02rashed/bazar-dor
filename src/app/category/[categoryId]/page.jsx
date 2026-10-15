@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const Page = async ({ params }) => {
   const { categoryId } = await params;
 
@@ -38,7 +40,7 @@ const Page = async ({ params }) => {
   );
 
   return (
-    <main className="container mx-auto p-6 w-6xl">
+    <main className="container mx-auto p-6 w-6xl mt-35">
       <h1 className="text-2xl font-bold mb-6">
         {products[0]?.categoryNameBn || categoryId}
       </h1>
@@ -47,6 +49,7 @@ const Page = async ({ params }) => {
       </p>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {products.map((product) => (
+        <Link href={`/product/${product.id}`} key={product.id}>
           <div key={product.id}
             className="rounded-xl border bg-white p-4 shadow-sm flex items-center gap-4" >
             <span className="text-4xl">{product.image || "🛒"}</span>
@@ -65,6 +68,7 @@ const Page = async ({ params }) => {
               </p>
             </div>
           </div>
+          </Link>
         ))}
       </div>
 

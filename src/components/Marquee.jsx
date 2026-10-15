@@ -8,7 +8,7 @@ const Marquee = async () => {
   const products = Array.isArray(data) ? data.slice(10, 30) : [];
 
   return (
-    <div className="fixed bg-[#f5f5f5] text-[#333] text-[14px] font-[500] mt-30 px-2 py-2 overflow-hidden">
+    <div className="fixed bg-[#f5f5f5] text-[#333] text-[14px] font-[500] mt-28 px-2 py-2 overflow-hidden">
       <marquee direction="left" scrollamount="5">
         <div className="inline-flex items-center">
           {products.map((product, index) => (

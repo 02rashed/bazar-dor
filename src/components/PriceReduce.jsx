@@ -1,4 +1,4 @@
-
+import Link from "next/link";
 const PriceReduce = async () => {
   const res = await fetch("https://openapi.programming-hero.com/api/bazardor/products");
   const data = await res.json();
@@ -14,6 +14,8 @@ const PriceReduce = async () => {
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {topReducedProducts.map((product) => (
+
+          <Link href={`/product/${product.id}`} key={product.id}>
           <div
             key={product.id}
             className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100/80 flex flex-col justify-between"
@@ -46,6 +48,7 @@ const PriceReduce = async () => {
               </div>
             </div>
           </div>
+          </Link>
         ))}
       </div>
     </section>
