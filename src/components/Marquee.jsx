@@ -1,10 +1,10 @@
-import React from 'react';
+
 
 const Marquee = async () => {
-  const res = await fetch("https://openapi.programming-hero.com/api/bazardor/products");
+  const res = await fetch("https://openapi.programming-hero.com/api/bazardor/products", {
+    cache: "force-cache",
+  });
   const data = await res.json();
-  
-  // Ensure data is an array before slicing to prevent crashes
   const products = Array.isArray(data) ? data.slice(10, 30) : [];
 
   return (

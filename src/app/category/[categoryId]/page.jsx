@@ -1,17 +1,17 @@
 import Link from "next/link";
+import { Suspense } from "react";
 
-const Page = async ({ params }) => {
+const CategoryContent = async ({ params }) => {
   const { categoryId } = await params;
 
-  const apiUrls = ["https://api.api-store.workers.dev/api/bazardor/products",
-    "https://api.abcz.workers.dev/api/bazardor/products",
-  ];
-    let allProducts = [];
+  const apiUrls = [ "https://openapi.programming-hero.com/api/bazardor/products",
+     "https://api.abcz.workers.dev/api/bazardor/products",];
+  let allProducts = [];
   let lastError;
 
   for (const url of apiUrls) {
     try {
-      const res = await fetch(url);
+      const res = await fetch(url, { cache: "force-cache" });
       if (!res.ok) {
         lastError = new Error(`API returned ${res.status}: ${url}`);
         continue;
@@ -40,7 +40,7 @@ const Page = async ({ params }) => {
   );
 
   return (
-    <main className="container mx-auto p-6 w-6xl mt-35">
+    <main className="container mx-auto p-6 max-w-6xl mt-35">
       <h1 className="text-2xl font-bold mb-6">
         {products[0]?.categoryNameBn || categoryId}
       </h1>
@@ -50,8 +50,8 @@ const Page = async ({ params }) => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {products.map((product) => (
         <Link href={`/product/${product.id}`} key={product.id}>
-          <div key={product.id}
-            className="rounded-xl border bg-white p-4 shadow-sm flex items-center gap-4" >
+          <div
+            className="rounded-xl border bg-white p-4 shadow-sm flex items-center gap-4 h-full" >
             <span className="text-4xl">{product.image || "🛒"}</span>
             <div>
               <h2 className="text-lg font-bold">
@@ -64,7 +64,7 @@ const Page = async ({ params }) => {
                 প্রতি - {product.unit}
               </p>
               <p className="mt-1">
-                আজকের দাম <p className="font-semibold">{product.today} টাকা</p>  
+                আজকের দাম <span className="font-semibold">{product.today} টাকা</span>  
               </p>
             </div>
           </div>
@@ -76,6 +76,14 @@ const Page = async ({ params }) => {
         <p>এই ক্যাটাগরিতে কোনো পণ্য পাওয়া যায়নি।</p>
       )}
     </main>
+  );
+};
+
+const Page = ({ params }) => {
+  return (
+    <Suspense fallback={<div className="text-center mt-40">লোড হচ্ছে...</div>}>
+      <CategoryContent params={params} />
+    </Suspense>
   );
 };
 

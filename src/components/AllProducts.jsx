@@ -1,7 +1,10 @@
 import Link from "next/link";
+
 const AllProducts = async () => {
-  const res = await fetch("https://openapi.programming-hero.com/api/bazardor/products");
-  const data = await res.json();;
+      const res = await fetch("https://openapi.programming-hero.com/api/bazardor/products", {
+    cache: "force-cache",
+  });
+  const data = await res.json();
 
   return (
     <section className="container mx-auto max-w-6xl p-4">
@@ -11,7 +14,7 @@ const AllProducts = async () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {data.map((product) => (
           <Link key={product.id} href={`/product/${product.id}`}>
-          <div key={product.id} className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100/80 flex flex-col justify-between">
+          <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100/80 flex flex-col justify-between h-full">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-12 rounded-xl bg-slate-100/70 flex items-center justify-center text-2xl flex-shrink-0">
                 {product.image || product.categoryIcon}

@@ -1,11 +1,14 @@
 import Link from "next/link";
+
 const PriceReduce = async () => {
-  const res = await fetch("https://openapi.programming-hero.com/api/bazardor/products");
+  const res = await fetch("https://openapi.programming-hero.com/api/bazardor/products", {
+    cache: "force-cache",
+  });
   const data = await res.json();
 
-
-  const topReducedProducts = data.filter((product) => product.change?.dir === "down").sort((a, b) => 
-    (a.change?.pct || 0) - (b.change?.pct || 0)).slice(0, 6);
+  const topReducedProducts = Array.isArray(data) 
+    ? data.filter((product) => product.change?.dir === "down").sort((a, b) => (a.change?.pct || 0) - (b.change?.pct || 0)).slice(0, 6)
+    : [];
 
   return (
     <section className="container mx-auto max-w-6xl p-4">
@@ -14,13 +17,8 @@ const PriceReduce = async () => {
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {topReducedProducts.map((product) => (
-
           <Link href={`/product/${product.id}`} key={product.id}>
-          <div
-            key={product.id}
-            className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100/80 flex flex-col justify-between"
-          >
-            {/* Top row: Icon, Title, and Unit */}
+          <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100/80 flex flex-col justify-between h-full">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-12 rounded-xl bg-slate-100/70 flex items-center justify-center text-2xl flex-shrink-0">
                 {product.image || product.categoryIcon}
@@ -42,7 +40,7 @@ const PriceReduce = async () => {
                   <span className="text-base font-normal text-slate-700">টাকা</span>
                 </p>
               </div>
-              <div className="flex items-center gap-1 bg-red-50 text-green-600 font-semibold text-sm px-2.5 py-1 rounded-md">
+              <div className="flex items-center gap-1 bg-green-50 text-green-600 font-semibold text-sm px-2.5 py-1 rounded-md">
                 <span className="text-xs">▼</span>
                 <span>{product.change?.pct}%</span>
               </div>

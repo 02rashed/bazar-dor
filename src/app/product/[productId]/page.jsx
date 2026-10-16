@@ -1,27 +1,28 @@
-import React from "react";
+import React, { Suspense } from "react";
 import Image from "next/image";
 
-const Page = async ({ params }) => {
+const ProductDetailsContent = async ({ params }) => {
   const { productId } = await params;
-
-  const res = await fetch(`https://openapi.programming-hero.com/api/bazardor/products/${productId}`);
+  const res = await fetch(`https://openapi.programming-hero.com/api/bazardor/products/${productId}`, {
+    cache: "force-cache",
+  });
   const product = await res.json();
-  const markets = product.markets;
+  const markets = product.markets || [];
+  
+  const lowestMarket = markets.length > 0 
+    ? markets.reduce((lowest, market) => Number(market.min) < Number(lowest.min) ? market : lowest)
+    : null;
 
-  const lowestMarket = markets.reduce((lowest, market) =>
-          Number(market.min) < Number(lowest.min) ? market : lowest
-        )
-  const highestMarket = markets.reduce((highest, market) =>
-          Number(market.max) > Number(highest.max) ? market : highest
-        )
-  const averagePrice =
-     markets.reduce(
-          (total, market) =>
-            total + (market.min + market.max) / 2, 0
-        ) / markets.length ;
+  const highestMarket = markets.length > 0 
+    ? markets.reduce((highest, market) => Number(market.max) > Number(highest.max) ? market : highest)
+    : null;
+
+  const averagePrice = markets.length > 0 
+    ? markets.reduce((total, market) => total + (Number(market.min) + Number(market.max)) / 2, 0) / markets.length 
+    : 0;
 
   const formatPrice = (price) =>
-    Number(price).toLocaleString("bn-BD", {
+    Number(price || 0).toLocaleString("bn-BD", {
       maximumFractionDigits: 2,
     });
 
@@ -36,7 +37,8 @@ const Page = async ({ params }) => {
             <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-[#f0f5f0] text-4xl">
                 {product.image ? (
                 <img src={product.image} alt={product.nameBn }
-                  className="h-14 w-14 object-contain" />) : ( product.categoryIcon)
+                  className="h-14 w-14 object-contain" />
+                ) : ( product.categoryIcon)
                   }
             </div>
             <div className="min-w-0">
@@ -49,13 +51,12 @@ const Page = async ({ params }) => {
               <p className="mt-2 text-sm text-[#829087]">
                 গতকালের তুলনায় আজ দাম{" "}
                 {changeDirection === "up" ? (
-                  <span className="font-medium text-red-500">
+                <span className="font-medium text-red-500">
                     বেড়েছে {formatPrice(changePercent)}%
                   </span>) : changeDirection === "down" ? (
                   <span className="font-medium text-green-600">
                     কমেছে {formatPrice(changePercent)}%
-                  </span>
-                ) : ( <span>পরিবর্তন নেই</span>)
+                  </span>) : ( <span>পরিবর্তন নেই</span>)
                 }
               </p>
             </div>
@@ -156,7 +157,7 @@ const Page = async ({ params }) => {
               <tbody>
                 {markets.length > 0 ? (
                   markets.map((market, index) => {
-                    const marketAverage = (market.min +  market.max)/ 2;
+                    const marketAverage = (Number(market.min) + Number(market.max)) / 2;
                     return (
                       <tr key={`${market.market}-${index}`}
                         className={`transition-colors hover:bg-[#edf4ed] 
@@ -191,6 +192,14 @@ const Page = async ({ params }) => {
         </section>
       </div>
     </main>
+  );
+};
+
+const Page = ({ params }) => {
+  return (
+    <Suspense fallback={<div className="text-center mt-40">লোড হচ্ছে...</div>}>
+      <ProductDetailsContent params={params} />
+    </Suspense>
   );
 };
 
