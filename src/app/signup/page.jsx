@@ -1,30 +1,35 @@
-"use client"
-import Link from 'next/link'
-import {authClient} from '@/lib/auth-client'
-import {useRouter} from 'next/navigation'
+"use client";
+import Link from "next/link";
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 
 const SignUpPage = () => {
-        const router = useRouter()
-        const onSubmit = async(e) => {
-            e.preventDefault()
-            const formData = new FormData(e.target)
-            const user = Object.fromEntries(formData.entries());
-            const {data, error} = await authClient.signUp.email({
-                ...user, 
-                callbackURL: "/"
-            })
-            if (data) {
-                router.push("/")
-            }
-            if(error){
-                console.log(error)
-            }
-        }
+  const router = useRouter();
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const user = Object.fromEntries(formData.entries());
+    const { data, error } = await authClient.signUp.email({
+      ...user,
+      callbackURL: "/",
+    });
+    if (data) {
+      toast.success("Signed Up Successfully");
+    }
+    if (error) {
+      toast.error(error.message);
+    }
+  };
+  const handleGoogleSignIn = async () => {
+    const data = await authClient.signIn.social({
+      provider: "google",
+    });
+  };
 
-    return (
-        <div className="min-h-screen bg-[#f0f5f0] px-4 pt-6 text-[#183027] mt-20 pt-20">
+  return (
+    <div className="min-h-screen bg-[#f0f5f0] px-4 pt-6 text-[#183027] mt-20 pt-20">
       <div className="mx-auto max-w-md">
-
         <div className="mb-6 text-center">
           <h1 className="text-3xl font-bold">অ্যাকাউন্ট তৈরি করুন</h1>
           <p className="mt-1 text-[#829087]">
@@ -36,44 +41,50 @@ const SignUpPage = () => {
           <form onSubmit={onSubmit} className="space-y-3">
             <div>
               <label className="mb-1 block">নাম</label>
-              <input 
-                type="text" 
-                name="name" 
-                placeholder="আপনার নাম" 
-                className="input w-full bg-transparent" 
+              <input
+                type="text"
+                name="name"
+                placeholder="আপনার নাম"
+                className="input w-full bg-transparent"
                 required
               />
             </div>
 
             <div>
               <label className="mb-1 block">ইমেইল</label>
-              <input 
-                type="email" 
-                name="email" 
-                placeholder="you@example.com" 
-                className="input w-full bg-transparent" 
+              <input
+                type="email"
+                name="email"
+                placeholder="you@example.com"
+                className="input w-full bg-transparent"
                 required
               />
             </div>
 
             <div>
               <label className="mb-1 block">পাসওয়ার্ড</label>
-              <input 
-                type="password" 
-                name="password" 
-                placeholder="কমপক্ষে ৮ অক্ষর" 
-                className="input w-full bg-transparent" 
+              <input
+                type="password"
+                name="password"
+                placeholder="কমপক্ষে ৮ অক্ষর"
+                className="input w-full bg-transparent"
                 required
               />
             </div>
             <div>
               <label className="mb-1 block">পাসওয়ার্ড নিশ্চিত করুন</label>
-              <input type="password"  name="confirmPassword" placeholder="আবার লিখুন" 
-                className="input w-full bg-transparent" 
+              <input
+                type="password"
+                name="confirmPassword"
+                placeholder="আবার লিখুন"
+                className="input w-full bg-transparent"
                 required
               />
             </div>
-            <button type="submit" className="btn mt-1 w-full border-none bg-[#07883f] text-white hover:bg-[#067535]">
+            <button
+              type="submit"
+              className="btn mt-1 w-full border-none bg-[#07883f] text-white hover:bg-[#067535]"
+            >
               সাইন আপ
             </button>
           </form>
@@ -85,7 +96,7 @@ const SignUpPage = () => {
           </div>
 
           <div className="grid grid-cols-2 gap-2">
-            <button type="button" className="btn btn-outline btn-sm py-5">
+            <button onClick={handleGoogleSignIn} type="button" className="btn btn-outline btn-sm py-5">
               🇬 Google দিয়ে
               <br />
               চালিয়ে যান
@@ -111,10 +122,9 @@ const SignUpPage = () => {
             ← হোম পেজে ফিরে যান
           </Link>
         </div>
-
       </div>
     </div>
-    );
+  );
 };
 
 export default SignUpPage;

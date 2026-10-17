@@ -22,7 +22,7 @@ const Banner = () => {
                 </button>
             </div>
             <div>
-                <Image src="/bazar-hero.png" width={400} height={400}  alt="logo" className="object-contain text-white" />  
+                <Image src="/bazar-hero.png" width={400} height={400} alt="logo" className="object-contain text-white" />  
             </div>
         </div>
     );

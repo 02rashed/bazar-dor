@@ -2,6 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useSyncExternalStore } from "react";
+import UserInfo from "./UserInfo";
 
 const subscribe = () => () => {};
 const getDate = () => new Date().toLocaleDateString("bn-BD", { dateStyle: "full" });
@@ -27,13 +28,8 @@ const TopHead = () => {
               <p className="text-xs font-medium text-gray-500">{date}</p>
             </div>
           </div>
-          <div className="flex items-center gap-4">
-            <button className="text-sm font-bold text-gray-800 transition-colors hover:text-green-700">
-              সাইন ইন
-            </button>
-            <button className="rounded-lg bg-[#008a45] px-5 py-2 text-sm font-bold text-white shadow-md shadow-green-700/20 transition-all hover:bg-green-700 active:scale-95">
-              সাইন আপ
-            </button>
+          <div>
+           <UserInfo />
           </div>
         </div>
       </div>

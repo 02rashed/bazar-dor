@@ -1,10 +1,27 @@
+"use client"
 import Link from "next/link";
+import {authClient} from '@/lib/auth-client'
+import {toast} from 'react-hot-toast'
 
 const SignInPage = () => {
+          const onSubmit = async(e) => {
+              e.preventDefault()
+              const formData = new FormData(e.target)
+              const user = Object.fromEntries(formData.entries());
+              const {data, error} = await authClient.signIn.email({
+                  ...user, 
+                  callbackURL: "/"
+              })
+              if (data) {
+                  toast.success("Signed In Successfully")
+              }
+              if(error){
+                  toast.error(error.message);
+              }
+          }
   return (
     <div className="min-h-screen bg-[#f0f5f0] px-4 pt-6 text-[#183027] mt-20 pt-20">
       <div className="mx-auto max-w-md">
-
         <div className="mb-6 text-center">
           <h1 className="text-3xl font-bold">সাইন ইন</h1>
           <p className="mt-1 text-[#829087]">
@@ -13,18 +30,18 @@ const SignInPage = () => {
         </div>
 
         <div className="rounded-2xl border border-[#e1e9e2] bg-[#fbfdfb] p-6">
-          <form className="space-y-3">
+          <form onSubmit={onSubmit} className="space-y-3">
             <div>
               <label className="mb-1 block">ইমেইল</label>
-              <input type="email" placeholder="you@example.com" className="input w-full bg-transparent" required/>
+              <input type="email" name="email" placeholder="you@example.com" className="input w-full bg-transparent" required/>
             </div>
 
             <div>
               <label className="mb-1 block">পাসওয়ার্ড</label>
-              <input type="password" placeholder="কমপক্ষে ৮ অক্ষর" className="input w-full bg-transparent" required/>
+              <input type="password" name="password" placeholder="কমপক্ষে ৮ অক্ষর" className="input w-full bg-transparent" required/>
             </div>
 
-            <button className="btn mt-1 w-full border-none bg-[#07883f] text-white hover:bg-[#067535]">
+            <button type="submit" className="btn mt-1 w-full border-none bg-[#07883f] text-white hover:bg-[#067535]">
               সাইন ইন
             </button>
           </form>
