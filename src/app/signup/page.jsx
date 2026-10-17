@@ -6,6 +6,7 @@ import { toast } from "react-hot-toast";
 
 const SignUpPage = () => {
   const router = useRouter();
+  
   const onSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
@@ -16,14 +17,24 @@ const SignUpPage = () => {
     });
     if (data) {
       toast.success("Signed Up Successfully");
+      router.push("/");
     }
     if (error) {
       toast.error(error.message);
     }
   };
-  const handleGoogleSignIn = async () => {
-    const data = await authClient.signIn.social({
+
+  const handleGoogleSignUp = async () => {
+    await authClient.signIn.social({
       provider: "google",
+      callbackURL: "/",
+    });
+  };
+
+  const handleGithubSignUp = async () => {
+    await authClient.signIn.social({
+      provider: "github",
+      callbackURL: "/",
     });
   };
 
@@ -37,7 +48,7 @@ const SignUpPage = () => {
           </p>
         </div>
 
-        <div className="rounded-2xl border border-[#e1e9e2] bg-[#fbfdfb] p-6">
+        <div className="rounded-2xl border border-[#e1e9e2] bg-[#fbfdfb] p-6 shadow-sm">
           <form onSubmit={onSubmit} className="space-y-3">
             <div>
               <label className="mb-1 block">নাম</label>
@@ -45,7 +56,7 @@ const SignUpPage = () => {
                 type="text"
                 name="name"
                 placeholder="আপনার নাম"
-                className="input w-full bg-transparent"
+                className="input w-full bg-transparent border border-gray-200 rounded-xl px-4 py-2.5"
                 required
               />
             </div>
@@ -56,7 +67,7 @@ const SignUpPage = () => {
                 type="email"
                 name="email"
                 placeholder="you@example.com"
-                className="input w-full bg-transparent"
+                className="input w-full bg-transparent border border-gray-200 rounded-xl px-4 py-2.5"
                 required
               />
             </div>
@@ -67,7 +78,7 @@ const SignUpPage = () => {
                 type="password"
                 name="password"
                 placeholder="কমপক্ষে ৮ অক্ষর"
-                className="input w-full bg-transparent"
+                className="input w-full bg-transparent border border-gray-200 rounded-xl px-4 py-2.5"
                 required
               />
             </div>
@@ -77,13 +88,13 @@ const SignUpPage = () => {
                 type="password"
                 name="confirmPassword"
                 placeholder="আবার লিখুন"
-                className="input w-full bg-transparent"
+                className="input w-full bg-transparent border border-gray-200 rounded-xl px-4 py-2.5"
                 required
               />
             </div>
             <button
               type="submit"
-              className="btn mt-1 w-full border-none bg-[#07883f] text-white hover:bg-[#067535]"
+              className="btn mt-1 w-full border-none bg-[#07883f] text-white hover:bg-[#067535] py-2.5 rounded-xl font-bold"
             >
               সাইন আপ
             </button>
@@ -96,13 +107,12 @@ const SignUpPage = () => {
           </div>
 
           <div className="grid grid-cols-2 gap-2">
-            <button onClick={handleGoogleSignIn} type="button" className="btn btn-outline btn-sm py-5">
+            <button onClick={handleGoogleSignUp} type="button" className="btn btn-outline btn-sm py-5 rounded-xl border border-gray-200">
               🇬 Google দিয়ে
               <br />
               চালিয়ে যান
             </button>
-
-            <button type="button" className="btn btn-outline btn-sm py-5">
+            <button onClick={handleGithubSignUp} type="button" className="btn btn-outline btn-sm py-5 rounded-xl border border-gray-200">
               ◉ GitHub দিয়ে
               <br />
               চালিয়ে যান
