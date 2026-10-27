@@ -1,6 +1,7 @@
 # বাজার দর (Bazar Dor) — Live Grocery Market Price Tracker
 
 বাজার দর is a modern Next.js App Router web application that tracks and displays live daily grocery and market prices in Bangladesh.
+
 Check it Live : https://bazar-dor-six-eta.vercel.app/
 
 
